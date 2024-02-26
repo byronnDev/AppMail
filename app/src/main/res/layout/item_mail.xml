@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- CardView es el contenedor principal de este layout -->
+<androidx.cardview.widget.CardView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    app:cardCornerRadius="10dp"
+    app:cardUseCompatPadding="true">
+
+    <!-- LinearLayout contiene todos los elementos del CardView -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <!-- RelativeLayout permite posicionar los elementos hijos en posiciones relativas entre sí -->
+        <RelativeLayout
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="6dp">
+
+            <!-- TextView muestra una letra en el CardView -->
+            <TextView
+                android:id="@+id/txtLetra"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:background="@drawable/rounded_corner_view"
+                android:fontFamily="sans-serif-black"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:text="A"
+                android:textAlignment="center"
+                android:textColor="@color/gray"
+                android:textSize="50sp"
+                android:textStyle="bold" />
+
+            <!-- LinearLayout contiene los TextViews de título y contenido -->
+            <LinearLayout
+                android:id="@+id/contenido"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp"
+                android:layout_toEndOf="@+id/txtLetra"
+                android:orientation="vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/txtLetra">
+
+                <!-- TextView muestra el título en el CardView -->
+                <TextView
+                    android:id="@+id/txtTitulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:text="Titulo"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:ellipsize="end"
+                    android:singleLine="true"/>
+
+                <!-- TextView muestra el contenido en el CardView -->
+                <TextView
+                    android:id="@+id/txtContenido"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:text="Contenido del correo electronico"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:singleLine="false" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
