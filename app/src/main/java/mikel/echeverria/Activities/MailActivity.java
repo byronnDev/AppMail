@@ -32,10 +32,14 @@ public class MailActivity extends AppCompatActivity {
         lblFrom = findViewById(R.id.lblFrom);
 
         // Ocultamos el mensaje por defecto
-        lblDefaultMessage.setVisibility(View.GONE);
+        hideDefaultMessage();
 
         getData();
         setData();
+    }
+
+    private void hideDefaultMessage() {
+        lblDefaultMessage.setVisibility(View.GONE);
     }
 
     public void getData() {
