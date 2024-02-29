@@ -48,8 +48,6 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
     @Override
     public int getItemCount() { return dataList.size(); } // Devuelve el tamaño de la lista
 
-    public void setItems(List<Mail> items) { dataList = items; } // Establece los items
-
     public class RecyclerDataHolder extends RecyclerView.ViewHolder {
         Drawable color;
         TextView txtLetra;
@@ -68,31 +66,89 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
         }
 
         void bindData(@NonNull final Mail item) {
-            title.setText(item.getSubject());
-            description.setText(item.getMessage());
-            txtLetra.setText(String.valueOf(item.getSenderName().toUpperCase().charAt(0)));
-            int colorInt = Color.parseColor("#" + item.getColor()); // Obtenemos el color en formato int
-            color.setTint(colorInt); // Establecemos el color
-
+            renderMailItem(item);
             // Set an OnClickListener
+            doCardClickFunction(item);
+        }
+
+        private void doCardClickFunction(@NonNull Mail item) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // Envía los datos a la actividad
                     // Si el movil está en modo horizontal
-                    int rotation = context.getResources().getConfiguration().orientation;
-                    if (rotation == Configuration.ORIENTATION_LANDSCAPE) {
-                        ((MainActivity) context).sendData(item.getSenderName(), item.getSubject(), item.getMessage());
-                    } else if (rotation == Configuration.ORIENTATION_PORTRAIT) {
-                        // Si el movil está en modo vertical
-                        Intent intent = new Intent(context, MailActivity.class);
-                        intent.putExtra("from", item.getSenderName());
-                        intent.putExtra("subject", item.getSubject());
-                        intent.putExtra("content", item.getMessage());
-                        context.startActivity(intent);
-                    }
+                    int rotation = getRotation();
+                    manageRotation(rotation, item);
                 }
             });
         }
+
+        private void renderMailItem(@NonNull Mail item) {
+            setInformation(item);
+            setImageAndColor(item);
+        }
+
+        private void setImageAndColor(@NonNull Mail item) {
+            setLetter(item);
+            setBackgroundColorOfImage(item);
+        }
+
+        private void setLetter(@NonNull Mail item) {
+            txtLetra.setText(String.valueOf(item.getSenderName().toUpperCase().charAt(0)));
+        }
+
+        private void setBackgroundColorOfImage(@NonNull Mail item) {
+            int colorInt = getColorInt(item);
+            color.setTint(colorInt); // Establecemos el color
+        }
+
+        private void setInformation(@NonNull Mail item) {
+            title.setText(item.getSubject());
+            description.setText(item.getMessage());
+        }
+    }
+
+    private static int getColorInt(@NonNull Mail item) {
+        int colorInt = Color.parseColor("#" + item.getColor()); // Obtenemos el color en formato int
+        return colorInt;
+    }
+
+    private void manageRotation(int rotation, @NonNull Mail item) {
+        if (isHorizontal(rotation)) {
+            sendAndRenderData(item);
+        } else if (isVertical(rotation)) {
+            // Si el movil está en modo vertical
+            sendDataToMailActivityAndStart(item);
+        }
+    }
+
+    private void sendAndRenderData(@NonNull Mail item) {
+        ((MainActivity) context).sendData(item.getSenderName(), item.getSubject(), item.getMessage());
+    }
+
+    private static boolean isVertical(int rotation) {
+        return rotation == Configuration.ORIENTATION_PORTRAIT;
+    }
+
+    private static boolean isHorizontal(int rotation) {
+        return rotation == Configuration.ORIENTATION_LANDSCAPE;
+    }
+
+    private int getRotation() {
+        return context.getResources().getConfiguration().orientation;
+    }
+
+    private void sendDataToMailActivityAndStart(@NonNull Mail item) {
+        Intent intent = sendDataToMailActivity(item);
+        context.startActivity(intent);
+    }
+
+    @NonNull
+    private Intent sendDataToMailActivity(@NonNull Mail item) {
+        Intent intent = new Intent(context, MailActivity.class);
+        intent.putExtra("from", item.getSenderName());
+        intent.putExtra("subject", item.getSubject());
+        intent.putExtra("content", item.getMessage());
+        return intent;
     }
 }

@@ -26,7 +26,7 @@ public class MainActivity extends FragmentActivity implements DataFragment.DataL
     }
 
     public void init() {
-        elements = Util.getDummyData(); // Cargamos los datos
+        getData();
 
         RecyclerDataAdapter adapter = new RecyclerDataAdapter(elements, this); // Creamos el adaptador
         RecyclerView recyclerView = findViewById(R.id.recyclerView); // Obtenemos el recyclerView
@@ -35,11 +35,23 @@ public class MainActivity extends FragmentActivity implements DataFragment.DataL
         recyclerView.setAdapter(adapter); // Establecemos el adaptador
     }
 
+    private void getData() {
+        elements = Util.getDummyData(); // Cargamos los datos
+    }
+
     @Override
     public void sendData(String from, String subject, String content) {
         DetailsFragment detailsFragment = (DetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragment);
-        if (detailsFragment != null) {
+        renderData(from, subject, content, detailsFragment);
+    }
+
+    private static void renderData(String from, String subject, String content, DetailsFragment detailsFragment) {
+        if (haveDetails(detailsFragment)) {
             detailsFragment.renderData(from, subject, content);
         }
+    }
+
+    private static boolean haveDetails(DetailsFragment detailsFragment) {
+        return detailsFragment != null;
     }
 }
